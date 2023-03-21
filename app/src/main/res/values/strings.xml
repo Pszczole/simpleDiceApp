@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">simpleDiceApp</string>
     <string name="welcome_in_dice_roller">Welcome in Dice roller!</string>
+    <string name="confirm">Confirm.</string>
 </resources>
