@@ -2,4 +2,12 @@
     <string name="app_name">simpleDiceApp</string>
     <string name="welcome_in_dice_roller">Welcome in Dice roller!</string>
     <string name="confirm">Confirm.</string>
+    <string name="num_dice_key">xyz</string>
+    <string name="hold_enable_key">abc</string>
+    <string-array name="num_dice_spinner_entries">
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
 </resources>

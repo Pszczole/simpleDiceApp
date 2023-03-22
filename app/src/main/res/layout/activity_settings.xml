@@ -49,7 +49,8 @@
         app:layout_constraintHorizontal_bias="0.855"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/num_dice_label"
-        app:layout_constraintVertical_bias="0.458" />
+        app:layout_constraintVertical_bias="0.458"
+        android:entries="@array/num_dice_spinner_entries"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
