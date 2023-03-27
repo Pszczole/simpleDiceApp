@@ -49,11 +49,122 @@ class MainActivityExtended : AppCompatActivity() {
                     //if this is the start of the second player. reset turn
                     resetTurn()
                 }
+                else{
+                    //Initialize the label of the game
+                    binding.playerLabel.apply {
+                        text = getString(R.string.player_id, currentPlayer)
+                        visibility = View.VISIBLE
+                    }
+                }
+
+                //Check the rollResultText to "Click roll" to encourage player to press button
+                binding.rollResultTextExtended.text = getString(R.string.click_roll)
+                //set the dice image click event handler
+                if(isHoldEnabled){
+                    setDiceClick()
+                }else{
+                    //The text is equal to "Roll"
+                    rollDices()
+                }
+
             }
 
         }
 
     }
+
+    private fun endGame(){
+        binding.rollButtonExtended.isEnabled = false //disable button
+        binding.playerLabel.visibility = View.INVISIBLE // Hide the label of the game
+        //Determinate the winner
+
+        var winner = when{
+            playerScores[0] == playerScores[1] -> -1 //draw
+            playerScores[0] > playerScores[1] -> 0 //Player 0 wins
+            else -> 1 //player 1 wins
+        }
+
+        //Display a snackbar with a result and an action that allows to start a new game
+        Snackbar.make(
+            binding.root,
+            if(winner != -1){
+                val points = playerScores[winner]
+                "Player $winner wins with $points points."
+            }else{
+                val points = playerScores[0]
+                "Draw with $points point."
+            },
+            Snackbar.LENGTH_INDEFINITE
+        ).setAction("Start over") {
+            binding.rollButtonExtended.isEnabled = true //enable the button
+            resetGame()
+        }.show()
+
+    }
+
+    private fun updateTextAndImages(){
+        //Prepare the string to be displayed with StringBuilder with initial String "Rolled"
+        val rolledText = StringBuilder(getString(R.string.rolled_msg))
+        var sum = 0
+        for(i in 0 until numDice){ // until so the range is not classed
+            val rollValue = diceValuesArray[i]
+            sum += rollValue
+            rolledText.append("$rollValue") //append it to the result string
+            if(i != numDice - 1)
+                rolledText.append(", ")// append ", " to each value excluding the last one
+            //Update the image of the dice ImageView based on the rolled value
+            findViewById<ImageView>(diceImgIdsArray[i]).setImageResource(resolveDrawable(rollValue))
+        }
+        //store the score of the player
+        playerScores[currentPlayer] = sum
+        rolledText.append("\nSum: $sum") //add the score to the result string
+        binding.rollResultTextExtended.text = rolledText //send the result string to the text
+
+    }
+
+    private fun setDiceClick(){
+        for ((diceIdx, id) in diceImgIdsArray.withIndex()){
+            //Iterate ovet the dices ImageViews and set listener of onClick event on each
+            findViewById<ImageView>(id).setOnClickListener{
+                //cast of the "it" argument of type View to ImageView
+                val img = it as ImageView
+                //Toggle the statue of the clicked dice
+                diceStateArray[diceIdx] = !diceStateArray[diceIdx]
+                //Change the tint of the clicked dice
+                changeDiceTInt(img, diceStateArray[diceIdx])
+            }
+        }
+    }
+
+    private fun rollDices(){
+        val dice = Dice()
+        //Extension of the rollDice method from MainActivity
+        for(i in 0 until numDice){
+            if(!diceStateArray[i]){
+                //Roll each of available dices only when it's not held
+            }
+        }
+
+        //Update the text displayed and images for each dice
+        updateTextAndImages()
+        rollCount +=1
+        if(rollCount == numDice){
+            //If the rollCount == numDice -> change player or end the game
+            if(currentPlayer == 1){
+                //If the current player is 1 -> end the game
+                endGame()
+            }else{
+                //Change the turn by changing the currentPlayer value
+                //and the text displayed in rollButton
+                currentPlayer = 1
+                binding.rollButtonExtended.text = getString(R.string.second_start)
+            }
+            //reset roll count
+            rollCount = 0
+        }
+
+    }
+
 
     //Function that converts our Int value to Image Resource
     fun resolveDrawable(value: Int): Int{
@@ -206,32 +317,5 @@ class MainActivityExtended : AppCompatActivity() {
                     ).show()
                 }
         }
-
-
-
-    override fun onStart(){
-        super.onStart()
-        Log.i(localClassName,"onStart")
-    }
-
-    override fun onResume(){
-        super.onResume()
-        Log.i(localClassName,"onResume")
-    }
-
-    override fun onPause(){
-        super.onPause()
-        Log.i(localClassName,"onPause")
-    }
-
-    override fun onStop(){
-        super.onStop()
-        Log.i(localClassName,"onStop")
-    }
-
-    override fun onDestroy(){
-        super.onDestroy()
-        Log.i(localClassName,"onDestroy")
-    }
 
 }

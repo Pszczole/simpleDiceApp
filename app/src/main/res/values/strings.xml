@@ -8,6 +8,10 @@
     <string name="button_initial">Confirm!</string>
     <string name="player_id">"Player%d"</string>
     <string name="button_enabled">Roll!</string>
+    <string name="click_roll">Click Roll!</string>
+    <string name="second_start">Start again!</string>
+    <string name="rolled_msg">Rolled:</string>
+    <string name="settings_menu_label">Settings</string>
     <string-array name="num_dice_spinner_entries">
         <item>2</item>
         <item>3</item>
