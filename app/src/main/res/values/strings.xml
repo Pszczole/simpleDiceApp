@@ -4,6 +4,10 @@
     <string name="confirm">Confirm.</string>
     <string name="num_dice_key">xyz</string>
     <string name="hold_enable_key">abc</string>
+    <string name="click_start">Click to start!</string>
+    <string name="button_initial">Confirm!</string>
+    <string name="player_id">"Player%d"</string>
+    <string name="button_enabled">Roll!</string>
     <string-array name="num_dice_spinner_entries">
         <item>2</item>
         <item>3</item>

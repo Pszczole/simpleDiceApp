@@ -8,63 +8,63 @@
     >
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/dice4ImgExtended"
         android:layout_width="80dp"
         android:layout_height="101dp"
         android:tintMode="multiply"
         app:layout_constraintBottom_toTopOf="@+id/rollResultTextExtended"
-        app:layout_constraintEnd_toStartOf="@+id/imageView5"
+        app:layout_constraintEnd_toStartOf="@+id/dice5ImgExtended"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toEndOf="@+id/dice3ImgExtended"
         app:layout_constraintTop_toBottomOf="@+id/playerLabel"
         app:srcCompat="@drawable/dice_1" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/dice5ImgExtended"
         android:layout_width="80dp"
         android:layout_height="101dp"
         android:tintMode="multiply"
         app:layout_constraintBottom_toTopOf="@+id/rollResultTextExtended"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintStart_toEndOf="@+id/dice4ImgExtended"
         app:layout_constraintTop_toBottomOf="@+id/playerLabel"
         app:srcCompat="@drawable/dice_1" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/dice1ImgExtended"
         android:layout_width="80dp"
         android:layout_height="101dp"
         android:tintMode="multiply"
         app:layout_constraintBottom_toTopOf="@+id/rollResultTextExtended"
-        app:layout_constraintEnd_toStartOf="@+id/imageView2"
+        app:layout_constraintEnd_toStartOf="@+id/dice2ImgExtended"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playerLabel"
         app:srcCompat="@drawable/dice_1" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/dice2ImgExtended"
         android:layout_width="80dp"
         android:layout_height="101dp"
         android:tintMode="multiply"
         app:layout_constraintBottom_toTopOf="@+id/rollResultTextExtended"
-        app:layout_constraintEnd_toStartOf="@+id/imageView3"
+        app:layout_constraintEnd_toStartOf="@+id/dice3ImgExtended"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/dice1ImgExtended"
         app:layout_constraintTop_toBottomOf="@+id/playerLabel"
         app:srcCompat="@drawable/dice_1" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/dice3ImgExtended"
         android:layout_width="80dp"
         android:layout_height="101dp"
         android:tintMode="multiply"
         android:layout_marginBottom="100dp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintEnd_toStartOf="@+id/imageView4"
+        app:layout_constraintBottom_toTopOf="@+id/rollButtonExtended"
+        app:layout_constraintEnd_toStartOf="@+id/dice4ImgExtended"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintStart_toEndOf="@+id/dice2ImgExtended"
         app:srcCompat="@drawable/dice_1" />
 
     <TextView
@@ -73,7 +73,7 @@
         android:layout_height="26dp"
         android:text="player_Id"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/imageView3"
+        app:layout_constraintBottom_toTopOf="@+id/dice3ImgExtended"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -84,16 +84,16 @@
         android:id="@+id/rollResultTextExtended"
         android:layout_width="209dp"
         android:layout_height="30dp"
-        android:text="Click to start!"
+        android:text="@string/click_start"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/rollButtonExtended"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@+id/dice3ImgExtended" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/rollButtonExtended"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="388dp"
