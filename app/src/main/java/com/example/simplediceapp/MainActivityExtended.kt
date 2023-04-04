@@ -78,7 +78,7 @@ class MainActivityExtended : AppCompatActivity() {
         binding.playerLabel.visibility = View.INVISIBLE // Hide the label of the game
         //Determinate the winner
 
-        var winner = when{
+        val winner = when{
             playerScores[0] == playerScores[1] -> -1 //draw
             playerScores[0] > playerScores[1] -> 0 //Player 0 wins
             else -> 1 //player 1 wins
@@ -124,7 +124,7 @@ class MainActivityExtended : AppCompatActivity() {
 
     private fun setDiceClick(){
         for ((diceIdx, id) in diceImgIdsArray.withIndex()){
-            //Iterate ovet the dices ImageViews and set listener of onClick event on each
+            //Iterate over the dices ImageViews and set listener of onClick event on each
             findViewById<ImageView>(id).setOnClickListener{
                 //cast of the "it" argument of type View to ImageView
                 val img = it as ImageView
@@ -137,11 +137,13 @@ class MainActivityExtended : AppCompatActivity() {
     }
 
     private fun rollDices(){
+        Log.i(localClassName,"rolledDices")
         val dice = Dice()
         //Extension of the rollDice method from MainActivity
         for(i in 0 until numDice){
             if(!diceStateArray[i]){
                 //Roll each of available dices only when it's not held
+                diceValuesArray[i] = dice.roll()
             }
         }
 
@@ -167,7 +169,7 @@ class MainActivityExtended : AppCompatActivity() {
 
 
     //Function that converts our Int value to Image Resource
-    fun resolveDrawable(value: Int): Int{
+    private fun resolveDrawable(value: Int): Int{
         return when (value){
             1 -> R.drawable.dice_1
             2 -> R.drawable.dice_2
@@ -183,15 +185,15 @@ class MainActivityExtended : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         //create a menu with menuInflater and R.menu.menu resource
-        var inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.settings_menu, menu)
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         //Handle the selection of menu items
         when(item.itemId){
-            R.id.settings_menu -> startSettingActivity()
+            R.id.settings -> startSettingActivity()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -227,7 +229,7 @@ class MainActivityExtended : AppCompatActivity() {
     }
     private fun resetTurn(){
         // prepare game for the next turn
-        for(num in 1 .. 4){
+        for(num in 0 .. 4){
             diceValuesArray[num] = 1 // Reset the values of displayed by each dice
             diceStateArray[num] = false // Reset the "hold state of each dice"
             findViewById<ImageView>(diceImgIdsArray[num]).let {
@@ -266,7 +268,7 @@ class MainActivityExtended : AppCompatActivity() {
             if(num in diceToHideBegin .. 5){
                 findViewById<ImageView>(diceImgIdsArray[num-1]).apply {
                     //Making the visibility to GONE make it disappear and
-                    //not takee space in the layout
+                    //not take space in the layout
                     visibility = View.GONE
                     //Just in case disable any clicking on the image by disabling
                     //clickable and focusable attribute

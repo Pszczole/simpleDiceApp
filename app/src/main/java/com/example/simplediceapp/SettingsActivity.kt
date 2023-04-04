@@ -1,10 +1,8 @@
 package com.example.simplediceapp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
-import com.example.simplediceapp.databinding.ActivityMainExtendedBinding
+import androidx.appcompat.app.AppCompatActivity
 import com.example.simplediceapp.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
@@ -15,7 +13,7 @@ class SettingsActivity : AppCompatActivity() {
         //Initialize binding
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //Retrive the current settings of the game that were passed with
+        //Retrieve the current settings of the game that were passed with
         //Intent to this Activity
         val numDice = intent.getIntExtra(getString(R.string.num_dice_key),2)
         val isHoldEnabled = intent.getBooleanExtra(getString(R.string.hold_enable_key),true)

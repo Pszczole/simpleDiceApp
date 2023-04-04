@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
 
     //Text update on roll (Clicking our button)
-    fun updateText(roll:Int, roll2:Int){
+    private fun updateText(roll:Int, roll2:Int){
         val rollResultTxt = findViewById<TextView>(R.id.rollResultText)
         rollResultTxt.text = "Rolled: ${roll} & ${roll2} "
         val r : Int = (0..255).random()
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         diceImg2.setImageResource((resolveDrawable(roll2)))
     }
     //Function that converts our Int value to Image Resource
-    fun resolveDrawable(value: Int): Int{
+    private fun resolveDrawable(value: Int): Int{
         return when (value){
             1 -> R.drawable.dice_1
             2 -> R.drawable.dice_2
@@ -94,8 +94,6 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         Log.i(localClassName,"onDestroy")
     }
-
-
 
 }
 

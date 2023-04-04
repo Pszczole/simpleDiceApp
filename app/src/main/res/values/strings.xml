@@ -6,12 +6,15 @@
     <string name="hold_enable_key">abc</string>
     <string name="click_start">Click to start!</string>
     <string name="button_initial">Confirm!</string>
-    <string name="player_id">"Player%d"</string>
+    <string name="player_id">"Player %d"</string>
     <string name="button_enabled">Roll!</string>
     <string name="click_roll">Click Roll!</string>
     <string name="second_start">Start again!</string>
     <string name="rolled_msg">Rolled:</string>
     <string name="settings_menu_label">Settings</string>
+    <string name="choose_the_number_of_dices">Choose the number of dices.</string>
+    <string name="number_of_dices">Number of dices.</string>
+    <string name="allow_dice_hole_feature">Allow dice hole feature.</string>
     <string-array name="num_dice_spinner_entries">
         <item>2</item>
         <item>3</item>
