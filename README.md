@@ -1,4 +1,4 @@
 # simpleDiceApp
 simpleDiceApp jest to aplikacja stworzona za pomocą Kotnlina do rzutu kostką, oraz została
 rozbudowana o mini grę.
-![alt text](https://github.com/Pszczole/simpleDiceApp/master/diceApp1.png?raw=true)
+![Screenshot](appDice1.png)
