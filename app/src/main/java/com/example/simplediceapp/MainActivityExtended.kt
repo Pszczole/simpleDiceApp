@@ -62,16 +62,141 @@ class MainActivityExtended : AppCompatActivity() {
                 //set the dice image click event handler
                 if(isHoldEnabled){
                     setDiceClick()
-                }else{
-                    //The text is equal to "Roll"
-                    rollDices()
                 }
 
+            }else{
+                //The text is equal to "Roll"
+                rollDices()
             }
 
         }
 
     }
+
+    //Register a callback for a SettingsActivity result.
+    //This code will be called when we return from Settings Activity (after onStart)
+
+    private val launchSettingActivity =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                result ->
+            Log.i(localClassName,"onActivityResult")
+            if(result.resultCode == RESULT_OK){
+                //Preform operations only when the resultCode is RESULT_OK
+                //Retrieve the data from the result.data Intent (only when it's not null)
+
+                result.data?.let {
+                        data ->
+                    // This code will be exectued only when result.data is not null,
+                    // "data" is the argument of a lambda
+                    // Get the numDice and isHoldEnabled settings
+                    numDice = data.getIntExtra(getString(R.string.num_dice_key),2)
+                    isHoldEnabled = data.getBooleanExtra(getString(R.string.hold_enable_key),true)
+                }
+                //Apply settings
+                applySettings()
+                //Reset the game - each time the user goes to settings activity
+                //and returns back the game will be reset
+                resetGame()
+                //Display a snackbar pop-up to confirm the settings change
+                Snackbar.make(
+                    binding.root,
+                    "Current settings: numDice: $numDice, isHoldEnabled: $isHoldEnabled",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+    private fun applySettings(){
+        //Each time new settings are applied the game resets
+        binding.rollButtonExtended.isEnabled = true // enable button so the user can click it again
+        resetGame()
+
+        val diceToHideBegin = numDice + 1
+        //According to the numDice setting -> hide the remaining dice
+        for(num in 1 .. 5){
+            //Change the visibility of dices -> the view is found by its id
+            if(num in diceToHideBegin .. 5){
+                findViewById<ImageView>(diceImgIdsArray[num-1]).apply {
+                    //Making the visibility to GONE make it disappear and
+                    //not take space in the layout
+                    visibility = View.GONE
+                    //Just in case disable any clicking on the image by disabling
+                    //clickable and focusable attribute
+                    isClickable = false
+                    isFocusable = false
+                }
+            }else{
+                findViewById<ImageView>(diceImgIdsArray[num - 1]).apply {
+                    //Make the image visible
+                    visibility = View.VISIBLE
+                    //make the image clickable
+                    isClickable = isHoldEnabled
+                    isFocusable = isHoldEnabled
+                }
+            }
+        }
+    }
+
+    private fun resetGame(){
+        //Reset variables of the game nad Initialize labels and buttons
+        currentPlayer = 0
+        playerScores[0] = 0
+        playerScores[1] = 0
+        rollCount = 0
+        binding.rollResultTextExtended.text = getString(R.string.click_start)
+        binding.playerLabel.visibility = View.INVISIBLE
+        binding.rollButtonExtended.text = getString(R.string.button_initial)
+        resetTurn()
+    }
+
+    private fun resetTurn(){
+        // prepare game for the next turn
+        for(num in 0 .. 4){
+            diceValuesArray[num] = 1 // Reset the values of displayed by each dice
+            diceStateArray[num] = false // Reset the "hold state of each dice"
+            findViewById<ImageView>(diceImgIdsArray[num]).let {
+                changeDiceTInt(it, false) // reset the tint of each dice img view
+                it.setImageResource(resolveDrawable(1))
+            }
+        }
+
+        //Change the game label to show that user has changed
+        binding.playerLabel.apply {
+            text = getString(R.string.player_id, currentPlayer)
+        }
+    }
+
+    private fun changeDiceTInt(img: ImageView, highlight:Boolean){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            //Change the tiny of the img. The getColor method is available for API >= M(API 23)
+            img.imageTintList =
+                ColorStateList.valueOf(getColor(if (highlight) R.color.myYellow
+                else R.color.white))
+        }else{
+            //For older API use getColor from resource class
+            @Suppress("DEPRECATION")// Annotation to disable the deprecation warning
+
+            img.imageTintList =
+                ColorStateList.valueOf(resources.getColor(if (highlight) R.color.myYellow
+                else R.color.white))
+        }
+    }
+
+    private fun startSettingActivity(){
+        //creates an Intent to start SettingActivity
+        val intent :Intent = Intent(this,SettingsActivity::class.java).apply {
+            //Add an extra value of type Int and a key stored in string resource with name num_dice_key
+            putExtra(getString(R.string.num_dice_key),numDice)
+            //Add an extra value of type Boolean and a key stored in string resource with name hold_enable_key
+            putExtra(getString(R.string.hold_enable_key), isHoldEnabled)
+            //The extra values can be retrieved in the destination activity with the keys
+        }
+
+        //Start the SettingsActivity with the launchSettingsActivity variable
+        launchSettingActivity.launch(intent)
+    }
+
+
 
     private fun endGame(){
         binding.rollButtonExtended.isEnabled = false //disable button
@@ -120,6 +245,21 @@ class MainActivityExtended : AppCompatActivity() {
         rolledText.append("\nSum: $sum") //add the score to the result string
         binding.rollResultTextExtended.text = rolledText //send the result string to the text
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        //create a menu with menuInflater and R.menu.menu resource
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        //Handle the selection of menu items
+        when(item.itemId){
+            R.id.settings -> startSettingActivity()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setDiceClick(){
@@ -183,141 +323,17 @@ class MainActivityExtended : AppCompatActivity() {
 
 
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        //create a menu with menuInflater and R.menu.menu resource
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        //Handle the selection of menu items
-        when(item.itemId){
-            R.id.settings -> startSettingActivity()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun startSettingActivity(){
-        //creates an Intent to start SettingActivity
-        val intent :Intent = Intent(this,SettingsActivity::class.java).apply {
-            //Add an extra value of type Int and a key stored in string resource with name num_dice_key
-            putExtra(getString(R.string.num_dice_key),numDice)
-            //Add an extra value of type Boolean and a key stored in string resource with name hold_enable_key
-            putExtra(getString(R.string.hold_enable_key), isHoldEnabled)
-            //The extra values can be retrieved in the destination activity with the keys
-        }
-
-        //Start the SettingsActivity with the launchSettingsActivity variable
-        launchSettingActivity.launch(intent)
-    }
-
-    private fun changeDiceTInt(img: ImageView, highlight:Boolean){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            //Change the tiny of the img. The getColor method is available for API >= M(API 23)
-            img.imageTintList =
-                ColorStateList.valueOf(getColor(if (highlight) R.color.myYellow
-                else R.color.white))
-        }else{
-            //For older API use getColor from resource class
-            @Suppress("DEPRECATION")// Annotation to disable the deprecation warning
-
-            img.imageTintList =
-                ColorStateList.valueOf(resources.getColor(if (highlight) R.color.myYellow
-                else R.color.white))
-        }
-    }
-    private fun resetTurn(){
-        // prepare game for the next turn
-        for(num in 0 .. 4){
-            diceValuesArray[num] = 1 // Reset the values of displayed by each dice
-            diceStateArray[num] = false // Reset the "hold state of each dice"
-            findViewById<ImageView>(diceImgIdsArray[num]).let {
-                changeDiceTInt(it, false) // reset the tint of each dice img view
-                it.setImageResource(resolveDrawable(1))
-            }
-        }
-
-        //Change the game label to show that user has changed
-        binding.playerLabel.apply {
-            text = getString(R.string.player_id, currentPlayer)
-        }
-    }
 
 
-    private fun resetGame(){
-        //Reset variables of the game nad Initialize labels and buttons
-        currentPlayer = 0
-        playerScores[0] = 0
-        playerScores[1] = 0
-        rollCount = 0
-        binding.rollResultTextExtended.text = getString(R.string.click_start)
-        binding.playerLabel.visibility = View.INVISIBLE
-        binding.rollButtonExtended.text = getString(R.string.button_initial)
-        resetTurn()
-    }
-    private fun applySettings(){
-        //Each time new settings are applied the game resets
-        binding.rollButtonExtended.isEnabled = true // enable button so the user can click it again
-        resetGame()
 
-        val diceToHideBegin = numDice + 1
-        //According to the numDice setting -> hide the remaining dice
-        for(num in 1 .. 5){
-            //Change the visibility of dices -> the view is found by its id
-            if(num in diceToHideBegin .. 5){
-                findViewById<ImageView>(diceImgIdsArray[num-1]).apply {
-                    //Making the visibility to GONE make it disappear and
-                    //not take space in the layout
-                    visibility = View.GONE
-                    //Just in case disable any clicking on the image by disabling
-                    //clickable and focusable attribute
-                    isClickable = false
-                    isFocusable = false
-                }
-            }else{
-                findViewById<ImageView>(diceImgIdsArray[num - 1]).apply {
-                    //Make the image visible
-                    visibility = View.VISIBLE
-                    //make the image clickable
-                    isClickable = isHoldEnabled
-                    isFocusable = isHoldEnabled
-                }
-            }
-        }
-    }
 
-    //Register a callback for a SettingsActivity result.
-    //This code will be called when we return from Settings Activity (after onStart)
 
-    private val launchSettingActivity =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            result ->
-                Log.i(localClassName,"onActivityResult")
-                if(result.resultCode == RESULT_OK){
-                    //Preform operations only when the resultCode is RESULT_OK
-                    //Retrieve the data from the result.data Intent (only when it's not null)
 
-                    result.data?.let {
-                        data ->
-                        // This code will be exectued only when result.data is not null,
-                        // "data" is the argument of a lambda
-                        // Get the numDice and isHoldEnabled settings
-                        numDice = data.getIntExtra(getString(R.string.num_dice_key),2)
-                        isHoldEnabled = data.getBooleanExtra(getString(R.string.hold_enable_key),true)
-                    }
-                    //Apply settings
-                    applySettings()
-                    //Reset the game - each time the user goes to settings activity
-                    //and returns back the game will be reset
-                    resetGame()
-                    //Display a snackbar pop-up to confirm the settings change
-                    Snackbar.make(
-                        binding.root,
-                        "Current settings: numDice: $numDice, isHoldEnabled: $isHoldEnabled",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-        }
+
+
+
+
+
+
 
 }
